@@ -2,6 +2,8 @@
 
 # NOTE: this example requires PyAudio because it uses the Microphone class
 
+import os
+
 import speech_recognition as sr
 
 # obtain audio from the microphone
@@ -30,9 +32,9 @@ except sr.RequestError as e:
     print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
 # recognize speech using Google Cloud Speech
-GOOGLE_CLOUD_SPEECH_CREDENTIALS = r"""INSERT THE CONTENTS OF THE GOOGLE CLOUD SPEECH JSON CREDENTIALS FILE HERE"""
+# Before run, create local authentication credentials (``gcloud auth application-default login``)
 try:
-    print("Google Cloud Speech thinks you said " + r.recognize_google_cloud(audio, credentials_json=GOOGLE_CLOUD_SPEECH_CREDENTIALS))
+    print("Google Cloud Speech thinks you said " + r.recognize_google_cloud(audio))
 except sr.UnknownValueError:
     print("Google Cloud Speech could not understand audio")
 except sr.RequestError as e:
@@ -95,7 +97,8 @@ except sr.RequestError as e:
 
 # recognize speech using Whisper API
 OPENAI_API_KEY = "INSERT OPENAI API KEY HERE"
+os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 try:
-    print(f"Whisper API thinks you said {r.recognize_whisper_api(audio, api_key=OPENAI_API_KEY)}")
+    print(f"OpenAI Whisper API thinks you said {r.recognize_openai(audio)}")
 except sr.RequestError as e:
-    print(f"Could not request results from Whisper API; {e}")
+    print(f"Could not request results from OpenAI Whisper API; {e}")

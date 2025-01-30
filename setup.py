@@ -4,7 +4,7 @@ import logging
 import os
 import stat
 
-from setuptools import setup
+from setuptools import find_packages, setup
 from setuptools.command.install import install
 
 import speech_recognition
@@ -38,7 +38,7 @@ class InstallWithExtraSteps(install):
 setup(
     name="SpeechRecognition",
     version=speech_recognition.__version__,
-    packages=["speech_recognition"],
+    packages=find_packages(exclude=["tests.*", "test"]),
     include_package_data=True,
     cmdclass={"install": InstallWithExtraSteps},
 
@@ -62,13 +62,17 @@ setup(
         "Operating System :: Other OS",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Multimedia :: Sound/Audio :: Speech",
     ],
-    python_requires=">=3.8",
-    install_requires=['requests>=2.26.0', "typing-extensions"],
+    python_requires=">=3.9",
+    install_requires=[
+        "typing-extensions",
+        "standard-aifc; python_version>='3.13'",
+        "audioop-lts; python_version>='3.13'",
+    ],
 )
